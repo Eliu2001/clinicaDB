@@ -26,6 +26,8 @@ CREATE TABLE citas (
     id_profesional INT NOT NULL REFERENCES profesionales(id_profesional)
 );
 
+--INSERTS
+
 INSERT INTO pacientes (nombre, apellido, rut, direccion, telefono, email) VALUES
 ('Juan', 'Pérez', '12.345.678-9', 'Av. Central 123', '987654321', 'juan.perez@mail.com'),
 ('María', 'Gómez', '23.456.789-0', 'Calle Norte 45', '912345678', 'maria.gomez@mail.com');
@@ -38,3 +40,13 @@ INSERT INTO citas (fecha_hora, motivo, estado, id_paciente, id_profesional) VALU
 ('2025-09-10 10:00:00', 'Control general', 'pendiente', 1, 1),
 ('2025-09-11 15:30:00', 'Dolor de cabeza persistente', 'pendiente', 2, 2);
 
+--evitar dobles agendamientos
+ALTER TABLE citas
+ADD CONSTRAINT uq_profesional_fecha UNIQUE (id_profesional, fecha_hora);
+
+ALTER TABLE citas
+ADD CONSTRAINT uq_paciente_fecha UNIQUE (id_paciente, fecha_hora);
+
+CREATE INDEX idx_citas_fecha ON citas (fecha_hora);
+
+CREATE INDEX idx_citas_estado ON citas (estado);
