@@ -82,3 +82,27 @@ ORDER BY c.fecha_hora;
 SELECT estado, COUNT(*) AS total
 FROM citas
 GROUP BY estado;
+
+--CONSULTAS JOIN
+
+--Agenda detallada con nombres
+SELECT 
+	c.id_cita,
+	to_char(c.fecha_hora, 'YYYY-MM-DD HH24:MI')AS fecha_hora,
+	c.estado,
+	p.nombre || ' ' || p.apellido AS paciente, 
+	pr.nombre || ' ' || pr.apellido AS profesional,
+	pr.especialidad
+FROM citas c 
+JOIN pacientes p ON p.id_paciente = c.id_paciente
+JOIN profesionales pr ON pr.id_profesional = c.id_profesional
+ORDER BY c.fecha_hora;
+
+--Citas de un profesional por rango de fechas 
+SELECT c.*, p.nombre ||' '|| p.apellido AS paciente
+FROM citas c
+JOIN pacientes p ON p.id_paciente = c.id_paciente
+WHERE c.id_profesional = 1 
+	AND c.fecha_hora BETWEEN '2025-09-10 00:00:00' AND '2025-09-10 23:59:59'
+ORDER BY c.fecha_hora;
+
